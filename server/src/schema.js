@@ -1,9 +1,12 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
+  "In the Query type, the fields of this type are entry points into the rest of our schema. These are top-level fields that our client can query for."
   type Query {
     "Query to get tracks array for the homepage grid"
-    tracksForHome: [Track!]!
+    tracksForHome: [Track!]!,
+    "Fetch a specific track, provided a track's ID"
+    track(id: ID!): Track,
   }
 
   "A track is a group of Modules that teaches about a specific topic"
@@ -18,7 +21,22 @@ const typeDefs = gql`
     "The track's approximate length to complete, in minutes"
     length: Int
     "The number of modules this track contains"
-    modulesCount: Int
+    modulesCount: Int,
+    "The track's complete description, can be in Markdown format"
+    description: String,
+    "The number of times a track has been viewed"
+    numberOfViews: Int,
+    "The track's complete array of Modules"
+    modules: [Module!]!
+  }
+
+  "A Module is a single unit of teaching. Multiple Modules compose a Track"
+  type Module {
+    id: ID!,
+    "The module's title"
+    title: String!,
+    "The module's length in minutes"
+    length: Int
   }
 
   "Author of a complete Track or a Module"
